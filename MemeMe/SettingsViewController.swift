@@ -9,25 +9,56 @@
 import Foundation
 import UIKit
 
-class SettingsViewController: UIViewController {
+class SettingsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
-    var textFieldFont: String = "Impact"
+    var firstViewController: UIViewController?
     
-    let availableFonts = ["Impact", "Helvetica"]
+    var selectedRow = Int()
+    
+    var textFieldFont: String?
+    
+    let availableFonts = ["Impact", "Helvetica", "Futura"]
+    
+    @IBOutlet weak var textSelectTable: UITableView!
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        // Get selectedRow based on textFieldFont variable on MemeEditorViewController
+        let previousController = firstViewController as! MemeEditorViewController
+        selectedRow = availableFonts.indexOf(previousController.textFieldFont)!
+        
+        textSelectTable.delegate = self
+        textSelectTable.dataSource = self
+    }
     
     @IBAction func goBack(sender: AnyObject) {
+        if let textfieldFont = textFieldFont {
+            let previousController = firstViewController as! MemeEditorViewController
+            previousController.textFieldFont = self.textFieldFont!
+        }
         self.dismissViewControllerAnimated(true, completion: nil)
     }
     
     
-
-    // function to set MemeEditorViewController's textFieldFont
-    // function to set MemeEditorViewController's textFieldFontSize
-    
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        
-        let controller = segue.destinationViewController as! MemeEditorViewController
-        
-        controller.textFieldFont = self.textFieldFont
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return availableFonts.count
     }
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: "Cell")
+        cell.textLabel?.text = availableFonts[indexPath.row]
+        if indexPath.row == selectedRow {
+            cell.accessoryType = UITableViewCellAccessoryType.Checkmark
+        }
+        
+        return cell
+    }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        textFieldFont = availableFonts[indexPath.row]
+        selectedRow = indexPath.row
+        tableView.reloadData()
+    }
+    
 }

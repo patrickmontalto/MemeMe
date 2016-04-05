@@ -17,11 +17,10 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
     @IBOutlet var imagePickerView: UIImageView!
     @IBOutlet var toolbar: UIToolbar!
     @IBOutlet var shareButton: UIBarButtonItem!
-    @IBOutlet var navbar: UINavigationItem!
     @IBOutlet var cancelButton: UIBarButtonItem!
     @IBOutlet var cameraButton: UIBarButtonItem!
     
-    var textFieldFont: String?
+    var textFieldFont = "Impact"
     
     // View lifecycle methods
     override func viewDidLoad() {
@@ -34,10 +33,9 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
         let memeTextAttributes = [
             NSStrokeColorAttributeName: UIColor.blackColor(),
             NSForegroundColorAttributeName: UIColor.whiteColor(),
-            NSFontAttributeName: UIFont(name: "HelveticaNeue-CondensedBlack", size: 40)!,
             NSStrokeWidthAttributeName: -5.0
         ]
-        
+
         // Set the default text attributes in textfields
         topTextField.defaultTextAttributes = memeTextAttributes
         bottomTextField.defaultTextAttributes = memeTextAttributes
@@ -60,11 +58,13 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
         topTextField.borderStyle = UITextBorderStyle.None
         bottomTextField.borderStyle = UITextBorderStyle.None
         
-        // Set textfield font if it is selected
-        if let fontName = textFieldFont {
-            topTextField.font = UIFont(name: fontName, size: 14)
-        }
-        
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        // Set top and bottom textfield fonts
+        topTextField.font = UIFont(name: textFieldFont, size: 40)
+        bottomTextField.font = UIFont(name: textFieldFont, size: 40)
     }
     
     func prepareDefaultState() {
@@ -157,6 +157,7 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
     func generateMemedImage() -> UIImage {
         // TODO: Hide navbar
         self.toolbar.hidden = true
+        self.navigationController?.navigationBar.hidden = true
         
         // Render view to an image
         UIGraphicsBeginImageContext(self.view.frame.size)
@@ -166,6 +167,7 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
         
         // TODO: Show navbar
         self.toolbar.hidden = false
+        self.navigationController?.navigationBar.hidden = false
         return memedImage
     }
     
@@ -192,15 +194,12 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
         presentViewController(cameraViewController, animated: true, completion: nil)
     }
     
-    
-    // TODO: Enable multiline text fields for bottom and top?
-    
-    // TODO: Disable Cancel button if top text field and bottom textfield is TOP and BOTTOM and no image is picked - or inverse: only enable if fields have text etc
-    
-    // TODO: Add settings button to change font faces. List 3 font faces available
-    // have 3 font face settings slide out from right side
-    
-    
-    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        let secondViewController = segue.destinationViewController as! SettingsViewController
+        
+        secondViewController.firstViewController = self
+
+    }
+
 }
 
