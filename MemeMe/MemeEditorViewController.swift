@@ -37,27 +37,14 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
         ]
 
         // Set the default text attributes in textfields
-        topTextField.defaultTextAttributes = memeTextAttributes
-        bottomTextField.defaultTextAttributes = memeTextAttributes
-        
-        // Position text in center of textfields
-        topTextField.textAlignment = NSTextAlignment.Center
-        bottomTextField.textAlignment = NSTextAlignment.Center
+        setAttributesForTextField(topTextField, textAttributes: memeTextAttributes)
+        setAttributesForTextField(bottomTextField, textAttributes: memeTextAttributes)
         
         // Set default text and disable share button
         prepareDefaultState()
         
         // Toggle the cameraButton if the device has a usable camera
         cameraButton.enabled = UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera)
-        
-        // Set bottom textfield delegate
-        topTextField.delegate = self
-        bottomTextField.delegate = self
-        
-        // Remove borders on textfields
-        topTextField.borderStyle = UITextBorderStyle.None
-        bottomTextField.borderStyle = UITextBorderStyle.None
-        
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -72,6 +59,13 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
         bottomTextField.text = "BOTTOM"
         shareButton.enabled = false
         imagePickerView.image = nil
+    }
+    
+    func setAttributesForTextField(textField: UITextField, textAttributes: [String: AnyObject]) {
+        textField.defaultTextAttributes = textAttributes
+        textField.textAlignment = NSTextAlignment.Center
+        textField.delegate = self
+        textField.borderStyle = UITextBorderStyle.None
     }
     
     // Textfield methods
@@ -101,6 +95,12 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
         // Instantiate the image picker controller and present
         let pickerController = UIImagePickerController()
         pickerController.delegate = self
+        
+        // Set sourcetype to camera if the camera button calls this function
+        if sender as! NSObject == cameraButton {
+            pickerController.sourceType = UIImagePickerControllerSourceType.Camera
+        }
+        
         // pickerController.allowsEditing = true
         self.presentViewController(pickerController, animated: true, completion: nil)
     }
@@ -122,11 +122,11 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
     }
 
     func keyboardWillShow(notification: NSNotification) {
-        view.frame.origin.y -= getKeyboardHeight(notification)
+        view.frame.origin.y = getKeyboardHeight(notification) * -1
     }
     
     func keyboardWillHide(notification: NSNotification) {
-        view.frame.origin.y += getKeyboardHeight(notification)
+        view.frame.origin.y = 0
     }
     
     func getKeyboardHeight(notification: NSNotification) -> CGFloat {
@@ -142,7 +142,9 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
         let activityViewController = UIActivityViewController(activityItems: [memedImage], applicationActivities: nil)
         activityViewController.completionWithItemsHandler = {
             (activityType, completed, items, error) in
-            self.saveMeme(memedImage)
+                if completed {
+                    self.saveMeme(memedImage)
+                }
         }
         presentViewController(activityViewController, animated: true, completion: nil)
     }
@@ -181,15 +183,6 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
     
     @IBAction func cancelMeme(sender: AnyObject) {
         prepareDefaultState()
-    }
-    
-    @IBAction func takeAnImage(sender: AnyObject) {
-        // Instantiate a camera view controller
-        let cameraViewController = UIImagePickerController()
-        cameraViewController.sourceType = UIImagePickerControllerSourceType.Camera
-        cameraViewController.delegate = self
-        //cameraViewController.allowsEditing = true
-        presentViewController(cameraViewController, animated: true, completion: nil)
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
