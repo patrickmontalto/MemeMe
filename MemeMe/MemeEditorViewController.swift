@@ -155,7 +155,6 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
     }
     
     func generateMemedImage() -> UIImage {
-        // TODO: Hide navbar
         self.toolbar.hidden = true
         self.navigationController?.navigationBar.hidden = true
         
@@ -165,7 +164,6 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
         let memedImage: UIImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         
-        // TODO: Show navbar
         self.toolbar.hidden = false
         self.navigationController?.navigationBar.hidden = false
         return memedImage
