@@ -52,12 +52,12 @@
                                 </items>
                             </toolbar>
                             <textField opaque="NO" clipsSubviews="YES" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="eXw-A6-Qqw">
-                                <rect key="frame" x="40" y="543" width="295" height="30"/>
+                                <rect key="frame" x="40" y="567" width="295" height="30"/>
                                 <fontDescription key="fontDescription" name="Impact" family="Impact" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="allCharacters"/>
                             </textField>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="dfY-r5-shg">
-                                <rect key="frame" x="40" y="94" width="295" height="30"/>
+                                <rect key="frame" x="40" y="74" width="295" height="30"/>
                                 <fontDescription key="fontDescription" name="Impact" family="Impact" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="allCharacters"/>
                             </textField>
@@ -85,10 +85,10 @@
                             <constraint firstItem="Zih-wf-90n" firstAttribute="bottom" secondItem="8bC-Xf-vdC" secondAttribute="bottomMargin" id="kGI-cQ-0cr"/>
                             <constraint firstAttribute="trailingMargin" secondItem="dfY-r5-shg" secondAttribute="trailing" constant="24" id="lXI-nv-cLh"/>
                             <constraint firstItem="dfY-r5-shg" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="mNZ-zQ-khD"/>
-                            <constraint firstItem="eXw-A6-Qqw" firstAttribute="top" secondItem="Qk9-2I-ihP" secondAttribute="bottom" constant="-124" id="mgl-aU-VX9"/>
+                            <constraint firstItem="eXw-A6-Qqw" firstAttribute="top" secondItem="Qk9-2I-ihP" secondAttribute="bottom" constant="-100" id="mgl-aU-VX9"/>
                             <constraint firstItem="Qk9-2I-ihP" firstAttribute="bottom" secondItem="8bC-Xf-vdC" secondAttribute="bottomMargin" id="tmx-gf-sMf"/>
                             <constraint firstItem="Zih-wf-90n" firstAttribute="top" secondItem="eXw-A6-Qqw" secondAttribute="bottom" constant="29" id="wUw-r3-LPR"/>
-                            <constraint firstItem="Qk9-2I-ihP" firstAttribute="top" secondItem="dfY-r5-shg" secondAttribute="bottom" constant="-124" id="yNn-8E-010"/>
+                            <constraint firstItem="Qk9-2I-ihP" firstAttribute="top" secondItem="dfY-r5-shg" secondAttribute="bottom" constant="-104" id="yNn-8E-010"/>
                             <constraint firstItem="Qk9-2I-ihP" firstAttribute="top" secondItem="dfY-r5-shg" secondAttribute="bottom" constant="-67" id="ycj-lF-k1h"/>
                             <constraint firstAttribute="trailingMargin" secondItem="Qk9-2I-ihP" secondAttribute="trailing" constant="-24" id="yuC-mQ-EDa"/>
                         </constraints>
@@ -101,12 +101,12 @@
                                 <exclude reference="F8j-df-pHc"/>
                                 <exclude reference="F55-wK-ANG"/>
                                 <exclude reference="Gxj-GY-As7"/>
+                                <exclude reference="5D1-RO-5r6"/>
+                                <exclude reference="hxQ-KH-S85"/>
                                 <exclude reference="Xw9-3P-eXt"/>
                                 <exclude reference="ceK-K4-NlX"/>
                                 <exclude reference="czm-PH-5tc"/>
                                 <exclude reference="wUw-r3-LPR"/>
-                                <exclude reference="5D1-RO-5r6"/>
-                                <exclude reference="hxQ-KH-S85"/>
                             </mask>
                         </variation>
                     </view>
