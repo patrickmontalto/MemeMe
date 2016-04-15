@@ -20,6 +20,7 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
     @IBOutlet var cancelButton: UIBarButtonItem!
     @IBOutlet var cameraButton: UIBarButtonItem!
     
+    @IBOutlet var memeEditorNavigationBar: UINavigationBar!
     var textFieldFont = "Impact"
     
     // View lifecycle methods
@@ -35,7 +36,7 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
             NSForegroundColorAttributeName: UIColor.whiteColor(),
             NSStrokeWidthAttributeName: -5.0
         ]
-
+        
         // Set the default text attributes in textfields
         setAttributesForTextField(topTextField, textAttributes: memeTextAttributes)
         setAttributesForTextField(bottomTextField, textAttributes: memeTextAttributes)
@@ -52,6 +53,7 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
         // Set top and bottom textfield fonts
         topTextField.font = UIFont(name: textFieldFont, size: 40)
         bottomTextField.font = UIFont(name: textFieldFont, size: 40)
+        
     }
     
     func prepareDefaultState() {
@@ -150,15 +152,20 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
     }
     
     func saveMeme(memedImage: UIImage) {
-        // Create the meme
         if let topText = topTextField.text, bottomText = bottomTextField.text, image = imagePickerView.image {
-            _ = Meme(topText: topText, bottomText: bottomText, image: image, memedImage: memedImage)
+            // Create the meme
+            let meme = Meme(topText: topText, bottomText: bottomText, image: image, memedImage: memedImage, fontName: textFieldFont)
+            
+            // Save the meme to Memes array of AppDelegate
+            let object = UIApplication.sharedApplication().delegate
+            let appDelegate = object as! AppDelegate
+            appDelegate.memes.append(meme)
         }
     }
     
     func generateMemedImage() -> UIImage {
         self.toolbar.hidden = true
-        self.navigationController?.navigationBar.hidden = true
+        memeEditorNavigationBar.hidden = true
         
         // Render view to an image
         UIGraphicsBeginImageContext(self.view.frame.size)
@@ -167,7 +174,7 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
         UIGraphicsEndImageContext()
         
         self.toolbar.hidden = false
-        self.navigationController?.navigationBar.hidden = false
+        memeEditorNavigationBar.hidden = false
         return memedImage
     }
     
@@ -183,6 +190,7 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
     
     @IBAction func cancelMeme(sender: AnyObject) {
         prepareDefaultState()
+        self.dismissViewControllerAnimated(true, completion: nil)
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -191,6 +199,6 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
         secondViewController.firstViewController = self
 
     }
-
+    
 }
 

@@ -14,4 +14,5 @@ struct Meme {
     let bottomText: String
     let image: UIImage
     let memedImage: UIImage
+    let fontName: String
 }
