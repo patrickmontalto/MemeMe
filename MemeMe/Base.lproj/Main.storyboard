@@ -113,7 +113,7 @@
                     </navigationItem>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
-                        <outlet property="flowLayout" destination="e3y-HZ-ugU" id="TPs-1K-9gq"/>
+                        <outlet property="flowLayout" destination="e3y-HZ-ugU" id="8pM-jw-k74"/>
                         <outlet property="memeCollectionView" destination="DaA-Cc-343" id="OVB-DI-67R"/>
                     </connections>
                 </collectionViewController>

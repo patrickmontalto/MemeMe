@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SentMemesCollectionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
+class SentMemesCollectionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     var memes = [Meme]()
     
@@ -18,8 +18,8 @@ class SentMemesCollectionViewController: UIViewController, UICollectionViewDataS
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let space: CGFloat = 3.0
-        let dimension = (view.frame.size.width - (2 * space)) / 3.0
+        let space: CGFloat = 0
+        let dimension = (view.frame.size.width)/2.0
         
         flowLayout.minimumLineSpacing = space
         flowLayout.minimumInteritemSpacing = space
@@ -34,6 +34,17 @@ class SentMemesCollectionViewController: UIViewController, UICollectionViewDataS
         memeCollectionView.reloadData()
     }
     
+    // looking for an alternative way to size cells properly:
+    
+//    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+//        var totalHeight: CGFloat = (self.view.frame.height) / 3
+//        var totalWidth: CGFloat = (self.view.frame.width) / 3
+//        print("The frame width is: \(self.view.frame.width)")
+//        print("The total width is: \(totalWidth)")
+//        return CGSizeMake(totalWidth, totalWidth)
+//    }
+    
+    
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return memes.count
     }
@@ -45,6 +56,10 @@ class SentMemesCollectionViewController: UIViewController, UICollectionViewDataS
         
         cell.memeImageView?.image = meme.image
         setTextAttributes(cell, meme: meme)
+        print("Cell width: \(cell.bounds.width)")
+        print("Cell height: \(cell.bounds.height)")
+        print("image width: \(cell.memeImageView.bounds.width)")
+        print("image height: \(cell.memeImageView.bounds.height)")
         return cell
     }
     
