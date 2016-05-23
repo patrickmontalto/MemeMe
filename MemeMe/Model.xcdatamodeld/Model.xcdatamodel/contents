@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="10171" systemVersion="15E2066" minimumToolsVersion="Xcode 7.0">
+    <entity name="Meme" representedClassName=".Meme" syncable="YES">
+        <attribute name="bottomText" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="fontName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="imagePath" optional="YES" attributeType="String" allowsExternalBinaryDataStorage="YES" syncable="YES"/>
+        <attribute name="memedImagePath" optional="YES" attributeType="String" allowsExternalBinaryDataStorage="YES" syncable="YES"/>
+        <attribute name="topText" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="Meme" positionX="-63" positionY="-18" width="128" height="118"/>
+    </elements>
+</model>

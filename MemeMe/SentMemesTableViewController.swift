@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 class SentMemesTableViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
@@ -16,13 +17,18 @@ class SentMemesTableViewController: UIViewController, UITableViewDataSource, UIT
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        let tabBarController = self.tabBarController as! MemeTabBarController
+        // set memes as memes from tab bar controller
+        memes = tabBarController.memes
     }
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(true)
-        let object = UIApplication.sharedApplication().delegate
-        let appDelegate = object as! AppDelegate
-        memes = appDelegate.memes
+        let tabBarController = self.tabBarController as! MemeTabBarController
+        // set memes as memes from tab bar controller
+        memes = tabBarController.memes
+        
+        // refresh table data
         memesTableView.reloadData()
         memesTableView.separatorColor = UIColor.clearColor()
     }
@@ -69,6 +75,14 @@ class SentMemesTableViewController: UIViewController, UITableViewDataSource, UIT
         cell.previewBottomText.attributedText = NSAttributedString(string: meme.bottomText, attributes: memeTextAttributes)
     }
     
+    @IBAction func addMeme(sender: AnyObject) {
+        let controller = storyboard!.instantiateViewControllerWithIdentifier("MemeEditorViewController") as! MemeEditorViewController
+        
+        controller.delegate = self
+        
+        self.presentViewController(controller, animated: true, completion: nil)
+
+    }
     // Enable editing on table view cells
     func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
         return true
@@ -76,15 +90,45 @@ class SentMemesTableViewController: UIViewController, UITableViewDataSource, UIT
     
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if (editingStyle == .Delete) {
-            // remove from shared meme model
-            let object = UIApplication.sharedApplication().delegate
-            let appDelegate = object as! AppDelegate
-            appDelegate.memes.removeAtIndex(indexPath.row)
-            // remove from current memes object
+            // get meme
+            let meme = memes[indexPath.row]
+            
+            // remove from shared meme array
+            let tabBarController = self.tabBarController as! MemeTabBarController
+            tabBarController.memes.removeAtIndex(indexPath.row)
+            
+            // remove from current memes array
             memes.removeAtIndex(indexPath.row)
             memesTableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+            
+            // remove the meme from the context
+            sharedContext.deleteObject(meme)
+            CoreDataStackManager.sharedInstance().saveContext()
         }
     }
     
+    // MARK: - Core Data Convenience
+    lazy var sharedContext: NSManagedObjectContext = {
+        return CoreDataStackManager.sharedInstance().managedObjectContext
+    }()
     
+}
+
+// MARK: - MemeEditorViewController Delegate
+extension SentMemesTableViewController: MemeEditorViewControllerDelegate {
+    func memeEditor(memeEditor: MemeEditorViewController, didSaveMeme meme: Meme?) {
+        if let newMeme = meme {
+            // Get tab bar controller
+            let tabBarController = self.tabBarController as! MemeTabBarController
+            // save the meme to the shared memes array
+            tabBarController.memes.append(newMeme)
+            
+            // debug:
+            print(tabBarController.memes.count)
+            
+            // Save context
+            CoreDataStackManager.sharedInstance().saveContext()
+        }
+        
+    }
 }

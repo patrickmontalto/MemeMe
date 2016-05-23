@@ -6,9 +6,16 @@
 //  Copyright © 2016 swift. All rights reserved.
 //
 
+// Import Core Data
+import CoreData
 import UIKit
 
 // Need to inherit from UIImagePickerControllerDelegate and UINavgiationControllerDelegate for UIImagePicker
+
+// Delegate
+protocol MemeEditorViewControllerDelegate {
+    func memeEditor(memeEditor: MemeEditorViewController, didSaveMeme meme: Meme?)
+}
 
 class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
 
@@ -19,6 +26,10 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
     @IBOutlet var shareButton: UIBarButtonItem!
     @IBOutlet var cancelButton: UIBarButtonItem!
     @IBOutlet var cameraButton: UIBarButtonItem!
+    
+    // The delegate will typically be a view controller, waiting for the Meme Editor
+    // to return a Meme
+    var delegate: MemeEditorViewControllerDelegate?
     
     @IBOutlet var memeEditorNavigationBar: UINavigationBar!
     var textFieldFont = "Impact"
@@ -153,13 +164,19 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
     
     func saveMeme(memedImage: UIImage) {
         if let topText = topTextField.text, bottomText = bottomTextField.text, image = imagePickerView.image {
-            // Create the meme
-            let meme = Meme(topText: topText, bottomText: bottomText, image: image, memedImage: memedImage, fontName: textFieldFont)
+            // create imagePath and memedImagePath
+            let imagePath = "\(NSDate().timeIntervalSince1970)"
+            let memedImagePath = "\(NSDate().timeIntervalSince1970)"
             
-            // Save the meme to Memes array of AppDelegate
-            let object = UIApplication.sharedApplication().delegate
-            let appDelegate = object as! AppDelegate
-            appDelegate.memes.append(meme)
+            // Create the meme dictionary and save meme
+            let memeDictionary = [Meme.Keys.TopText: topText, Meme.Keys.BottomText:bottomText, Meme.Keys.ImagePath: imagePath, Meme.Keys.MemedImagePath: memedImagePath, Meme.Keys.fontName: textFieldFont]
+            
+            let meme = Meme(dictionary: memeDictionary, context: sharedContext)
+            
+            meme.image = image
+            meme.memedImage = memedImage
+            
+            delegate?.memeEditor(self, didSaveMeme: meme)
         }
     }
     
@@ -199,6 +216,11 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
         secondViewController.firstViewController = self
 
     }
+    
+    // MARK: - Core Data Convenience
+    lazy var sharedContext: NSManagedObjectContext = {
+        return CoreDataStackManager.sharedInstance().managedObjectContext
+    }()
     
 }
 

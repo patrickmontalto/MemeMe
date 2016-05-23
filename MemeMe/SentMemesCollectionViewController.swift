@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 class SentMemesCollectionViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
@@ -28,12 +29,19 @@ class SentMemesCollectionViewController: UIViewController, UICollectionViewDataS
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(true)
-        let object = UIApplication.sharedApplication().delegate
-        let appDelegate = object as! AppDelegate
-        memes = appDelegate.memes
+        let tabBarController = self.tabBarController as! MemeTabBarController
+        memes = tabBarController.memes
         memeCollectionView.reloadData()
     }
     
+    @IBAction func addMeme(sender: AnyObject) {
+        let controller = storyboard!.instantiateViewControllerWithIdentifier("MemeEditorViewController") as! MemeEditorViewController
+            
+        controller.delegate = self
+            
+        self.presentViewController(controller, animated: true, completion: nil)
+
+    }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return memes.count
@@ -70,5 +78,23 @@ class SentMemesCollectionViewController: UIViewController, UICollectionViewDataS
         cell.previewBottomText.attributedText = NSAttributedString(string: meme.bottomText, attributes: memeTextAttributes)
     }
     
-    
+}
+
+// MARK: - MemeEditorViewController Delegate
+extension SentMemesCollectionViewController: MemeEditorViewControllerDelegate {
+    func memeEditor(memeEditor: MemeEditorViewController, didSaveMeme meme: Meme?) {
+        if let newMeme = meme {
+            // Get tab bar controller
+            let tabBarController = self.tabBarController as! MemeTabBarController
+            // save the meme to the shared memes array
+            tabBarController.memes.append(newMeme)
+            
+            // debug:
+            print(tabBarController.memes.count)
+            
+            // Save context
+            CoreDataStackManager.sharedInstance().saveContext()
+        }
+        
+    }
 }
